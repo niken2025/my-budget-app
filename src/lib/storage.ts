@@ -24,3 +24,10 @@ export function deleteTransaction(id: string) {
   saveTransactions(transactions);
   return transactions;
 }
+
+export function importTransactions(newItems: Transaction[]) {
+  const existing = getTransactions();
+  const merged = [...newItems, ...existing];
+  saveTransactions(merged);
+  return merged;
+}

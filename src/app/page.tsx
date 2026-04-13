@@ -6,11 +6,13 @@ import {
   getTransactions,
   addTransaction,
   deleteTransaction,
+  importTransactions,
 } from "@/lib/storage";
 import Summary from "@/components/Summary";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionList from "@/components/TransactionList";
 import Dashboard from "@/components/Dashboard";
+import CsvUpload from "@/components/CsvUpload";
 
 export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -34,6 +36,15 @@ export default function Home() {
 
   const handleDelete = (id: string) => {
     const updated = deleteTransaction(id);
+    setTransactions(updated);
+  };
+
+  const handleImport = (items: Omit<Transaction, "id">[]) => {
+    const withIds = items.map((item) => ({
+      ...item,
+      id: crypto.randomUUID(),
+    }));
+    const updated = importTransactions(withIds);
     setTransactions(updated);
   };
 
@@ -96,6 +107,7 @@ export default function Home() {
 
             <Summary transactions={transactions} currentMonth={currentMonth} />
             <TransactionForm onAdd={handleAdd} />
+            <CsvUpload onImport={handleImport} />
             <TransactionList
               transactions={transactions}
               currentMonth={currentMonth}
