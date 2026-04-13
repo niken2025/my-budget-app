@@ -25,27 +25,29 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setTransactions(getTransactions());
-    setMounted(true);
+    getTransactions().then((data) => {
+      setTransactions(data);
+      setMounted(true);
+    });
   }, []);
 
-  const handleAdd = (data: Omit<Transaction, "id">) => {
+  const handleAdd = async (data: Omit<Transaction, "id">) => {
     const transaction: Transaction = { ...data, id: crypto.randomUUID() };
-    const updated = addTransaction(transaction);
+    const updated = await addTransaction(transaction);
     setTransactions(updated);
   };
 
-  const handleDelete = (id: string) => {
-    const updated = deleteTransaction(id);
+  const handleDelete = async (id: string) => {
+    const updated = await deleteTransaction(id);
     setTransactions(updated);
   };
 
-  const handleImport = (items: Omit<Transaction, "id">[]) => {
+  const handleImport = async (items: Omit<Transaction, "id">[]) => {
     const withIds = items.map((item) => ({
       ...item,
       id: crypto.randomUUID(),
     }));
-    const updated = importTransactions(withIds);
+    const updated = await importTransactions(withIds);
     setTransactions(updated);
   };
 
