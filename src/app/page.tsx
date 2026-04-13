@@ -13,6 +13,7 @@ import TransactionForm from "@/components/TransactionForm";
 import TransactionList from "@/components/TransactionList";
 import Dashboard from "@/components/Dashboard";
 import CsvUpload from "@/components/CsvUpload";
+import SmartInsights from "@/components/SmartInsights";
 
 export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -84,7 +85,7 @@ export default function Home() {
 
       {/* Content */}
       <main className="flex-1 max-w-lg mx-auto px-4 py-6 w-full pb-24">
-        {view === "home" ? (
+        {view === "home" && (
           <div className="space-y-6">
             {/* Month Navigation */}
             <div className="flex items-center justify-center gap-4">
@@ -114,8 +115,38 @@ export default function Home() {
               onDelete={handleDelete}
             />
           </div>
-        ) : (
+        )}
+
+        {view === "dashboard" && (
           <Dashboard transactions={transactions} />
+        )}
+
+        {view === "insights" && (
+          <div className="space-y-6">
+            {/* Month Navigation */}
+            <div className="flex items-center justify-center gap-4">
+              <button
+                onClick={() => changeMonth(-1)}
+                className="w-10 h-10 rounded-lg cyber-card flex items-center justify-center text-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all cursor-pointer text-lg"
+              >
+                ‹
+              </button>
+              <h2 className="text-lg font-semibold text-[#e0e0ff] w-32 text-center tracking-wide">
+                {monthLabel}
+              </h2>
+              <button
+                onClick={() => changeMonth(1)}
+                className="w-10 h-10 rounded-lg cyber-card flex items-center justify-center text-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all cursor-pointer text-lg"
+              >
+                ›
+              </button>
+            </div>
+
+            <SmartInsights
+              transactions={transactions}
+              currentMonth={currentMonth}
+            />
+          </div>
         )}
       </main>
 
@@ -149,6 +180,20 @@ export default function Home() {
                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
             <span className="text-xs font-medium tracking-wider">DASH</span>
+          </button>
+          <button
+            onClick={() => setView("insights")}
+            className={`flex-1 py-3 flex flex-col items-center gap-1 cursor-pointer transition-all ${
+              view === "insights"
+                ? "text-[#b400ff] drop-shadow-[0_0_8px_rgba(180,0,255,0.5)]"
+                : "text-gray-600 hover:text-gray-400"
+            }`}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            <span className="text-xs font-medium tracking-wider">AI</span>
           </button>
         </div>
       </nav>

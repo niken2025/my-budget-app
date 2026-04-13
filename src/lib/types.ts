@@ -1,6 +1,6 @@
 export type TransactionType = "income" | "expense";
 
-export type ViewMode = "home" | "dashboard";
+export type ViewMode = "home" | "dashboard" | "insights";
 export type DashboardPeriod = "monthly" | "yearly";
 
 export interface Transaction {
