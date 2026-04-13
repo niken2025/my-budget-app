@@ -13,6 +13,7 @@ export default function CsvUpload({ onImport }: CsvUploadProps) {
   const [preview, setPreview] = useState<Omit<Transaction, "id">[] | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const [fileName, setFileName] = useState("");
+  const [detectedFormat, setDetectedFormat] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -20,27 +21,20 @@ export default function CsvUpload({ onImport }: CsvUploadProps) {
     setFileName(file.name);
 
     const reader = new FileReader();
-    reader.onload = (e) => {
-      const content = e.target?.result as string;
-      const result = parseCSV(content);
-      setPreview(result.transactions);
-      setErrors(result.errors);
-    };
-    // 한글 인코딩 지원
-    reader.readAsText(file, "euc-kr");
+    // UTF-8과 EUC-KR 두 가지로 파싱 시도 후 더 나은 결과 사용
+    const tryParse = (encoding: string) =>
+      new Promise<ReturnType<typeof parseCSV>>((resolve) => {
+        const r = new FileReader();
+        r.onload = (e) => resolve(parseCSV(e.target?.result as string));
+        r.readAsText(file, encoding);
+      });
 
-    // UTF-8로도 시도
-    const reader2 = new FileReader();
-    reader2.onload = (e) => {
-      const content = e.target?.result as string;
-      const result = parseCSV(content);
-      // UTF-8 결과가 더 좋으면 사용
-      if (result.transactions.length > (preview?.length || 0)) {
-        setPreview(result.transactions);
-        setErrors(result.errors);
-      }
-    };
-    reader2.readAsText(file, "utf-8");
+    Promise.all([tryParse("utf-8"), tryParse("euc-kr")]).then(([utf8, euckr]) => {
+      const best = utf8.transactions.length >= euckr.transactions.length ? utf8 : euckr;
+      setPreview(best.transactions);
+      setErrors(best.errors);
+      setDetectedFormat(best.detectedFormat);
+    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +64,7 @@ export default function CsvUpload({ onImport }: CsvUploadProps) {
     setPreview(null);
     setErrors([]);
     setFileName("");
+    setDetectedFormat("");
   };
 
   const format = (n: number) => n.toLocaleString("ko-KR");
@@ -132,7 +127,7 @@ export default function CsvUpload({ onImport }: CsvUploadProps) {
               CSV 파일을 드래그하거나 클릭하여 선택
             </p>
             <p className="text-xs text-gray-600 mt-2">
-              하나카드, 국민카드, 신한카드 등 지원
+              하나은행, 하나카드, 국민은행, 신한카드 등 지원
             </p>
           </div>
         )}
@@ -156,9 +151,16 @@ export default function CsvUpload({ onImport }: CsvUploadProps) {
       {/* Preview */}
       {preview && preview.length > 0 && (
         <div>
-          <p className="text-xs text-gray-500 mb-2 tracking-wider">
-            PREVIEW — {preview.length}건 감지됨
-          </p>
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-gray-500 tracking-wider">
+              PREVIEW — {preview.length}건 감지됨
+            </p>
+            {detectedFormat && (
+              <span className="text-[10px] text-[#b400ff] px-2 py-0.5 rounded-full border border-[rgba(180,0,255,0.3)] bg-[rgba(180,0,255,0.1)]">
+                {detectedFormat}
+              </span>
+            )}
+          </div>
           <div className="max-h-48 overflow-y-auto space-y-1 pr-1">
             {preview.slice(0, 20).map((t, i) => (
               <div
