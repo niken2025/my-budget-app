@@ -34,26 +34,26 @@ export default function Dashboard({ transactions }: DashboardProps) {
   return (
     <div className="space-y-5">
       {/* Period Toggle */}
-      <div className="flex bg-gray-100 rounded-xl p-1">
+      <div className="flex cyber-card rounded-xl p-1">
         <button
           onClick={() => setPeriod("monthly")}
-          className={`flex-1 py-2.5 rounded-lg font-medium text-sm transition-all cursor-pointer ${
+          className={`flex-1 py-2.5 rounded-lg font-medium text-sm transition-all cursor-pointer tracking-wider ${
             period === "monthly"
-              ? "bg-white text-gray-800 shadow-sm"
-              : "text-gray-500 hover:text-gray-700"
+              ? "bg-[rgba(0,240,255,0.15)] text-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.1)]"
+              : "text-gray-500 hover:text-gray-300"
           }`}
         >
-          월별
+          MONTHLY
         </button>
         <button
           onClick={() => setPeriod("yearly")}
-          className={`flex-1 py-2.5 rounded-lg font-medium text-sm transition-all cursor-pointer ${
+          className={`flex-1 py-2.5 rounded-lg font-medium text-sm transition-all cursor-pointer tracking-wider ${
             period === "yearly"
-              ? "bg-white text-gray-800 shadow-sm"
-              : "text-gray-500 hover:text-gray-700"
+              ? "bg-[rgba(255,0,170,0.15)] text-[#ff00aa] shadow-[0_0_10px_rgba(255,0,170,0.1)]"
+              : "text-gray-500 hover:text-gray-300"
           }`}
         >
-          연별
+          YEARLY
         </button>
       </div>
 
@@ -61,24 +61,20 @@ export default function Dashboard({ transactions }: DashboardProps) {
       <div className="flex items-center justify-center gap-4">
         <button
           onClick={() =>
-            period === "monthly"
-              ? changeMonth(-1)
-              : setCurrentYear((y) => y - 1)
+            period === "monthly" ? changeMonth(-1) : setCurrentYear((y) => y - 1)
           }
-          className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer text-lg"
+          className="w-10 h-10 rounded-lg cyber-card flex items-center justify-center text-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all cursor-pointer text-lg"
         >
           ‹
         </button>
-        <h2 className="text-lg font-semibold text-gray-700 w-32 text-center">
+        <h2 className="text-lg font-semibold text-[#e0e0ff] w-32 text-center tracking-wide">
           {period === "monthly" ? monthLabel : `${currentYear}년`}
         </h2>
         <button
           onClick={() =>
-            period === "monthly"
-              ? changeMonth(1)
-              : setCurrentYear((y) => y + 1)
+            period === "monthly" ? changeMonth(1) : setCurrentYear((y) => y + 1)
           }
-          className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer text-lg"
+          className="w-10 h-10 rounded-lg cyber-card flex items-center justify-center text-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all cursor-pointer text-lg"
         >
           ›
         </button>
@@ -87,20 +83,11 @@ export default function Dashboard({ transactions }: DashboardProps) {
       {/* Charts */}
       {period === "monthly" ? (
         <>
-          <MonthlyChart
-            transactions={transactions}
-            currentMonth={currentMonth}
-          />
-          <CategoryChart
-            transactions={transactions}
-            currentMonth={currentMonth}
-          />
+          <MonthlyChart transactions={transactions} currentMonth={currentMonth} />
+          <CategoryChart transactions={transactions} currentMonth={currentMonth} />
         </>
       ) : (
-        <YearlyChart
-          transactions={transactions}
-          currentYear={currentYear}
-        />
+        <YearlyChart transactions={transactions} currentYear={currentYear} />
       )}
     </div>
   );

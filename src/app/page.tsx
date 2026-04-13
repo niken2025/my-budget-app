@@ -27,10 +27,7 @@ export default function Home() {
   }, []);
 
   const handleAdd = (data: Omit<Transaction, "id">) => {
-    const transaction: Transaction = {
-      ...data,
-      id: crypto.randomUUID(),
-    };
+    const transaction: Transaction = { ...data, id: crypto.randomUUID() };
     const updated = addTransaction(transaction);
     setTransactions(updated);
   };
@@ -56,7 +53,7 @@ export default function Home() {
   if (!mounted) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-400 text-lg">로딩 중...</div>
+        <div className="neon-text-cyan text-lg animate-pulse">LOADING...</div>
       </div>
     );
   }
@@ -64,11 +61,13 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-20">
-        <div className="max-w-lg mx-auto px-4 py-4">
-          <h1 className="text-xl font-bold text-gray-800 text-center">
-            💰 나의 가계부
+      <header className="sticky top-0 z-20 cyber-card border-t-0 border-x-0">
+        <div className="max-w-lg mx-auto px-4 py-4 flex items-center justify-center gap-3">
+          <div className="w-2 h-2 rounded-full bg-[#00f0ff] shadow-[0_0_8px_#00f0ff]" />
+          <h1 className="text-xl font-bold tracking-wider neon-text-cyan">
+            BUDGET PUNK
           </h1>
+          <div className="w-2 h-2 rounded-full bg-[#ff00aa] shadow-[0_0_8px_#ff00aa]" />
         </div>
       </header>
 
@@ -80,31 +79,23 @@ export default function Home() {
             <div className="flex items-center justify-center gap-4">
               <button
                 onClick={() => changeMonth(-1)}
-                className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer text-lg"
+                className="w-10 h-10 rounded-lg cyber-card flex items-center justify-center text-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all cursor-pointer text-lg"
               >
                 ‹
               </button>
-              <h2 className="text-lg font-semibold text-gray-700 w-32 text-center">
+              <h2 className="text-lg font-semibold text-[#e0e0ff] w-32 text-center tracking-wide">
                 {monthLabel}
               </h2>
               <button
                 onClick={() => changeMonth(1)}
-                className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer text-lg"
+                className="w-10 h-10 rounded-lg cyber-card flex items-center justify-center text-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all cursor-pointer text-lg"
               >
                 ›
               </button>
             </div>
 
-            {/* Summary */}
-            <Summary
-              transactions={transactions}
-              currentMonth={currentMonth}
-            />
-
-            {/* Add Transaction */}
+            <Summary transactions={transactions} currentMonth={currentMonth} />
             <TransactionForm onAdd={handleAdd} />
-
-            {/* Transaction List */}
             <TransactionList
               transactions={transactions}
               currentMonth={currentMonth}
@@ -117,49 +108,35 @@ export default function Home() {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-20">
+      <nav className="fixed bottom-0 left-0 right-0 z-20 cyber-card border-b-0 border-x-0">
         <div className="max-w-lg mx-auto flex">
           <button
             onClick={() => setView("home")}
-            className={`flex-1 py-3 flex flex-col items-center gap-1 cursor-pointer transition-colors ${
-              view === "home" ? "text-blue-600" : "text-gray-400"
+            className={`flex-1 py-3 flex flex-col items-center gap-1 cursor-pointer transition-all ${
+              view === "home"
+                ? "text-[#00f0ff] drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]"
+                : "text-gray-600 hover:text-gray-400"
             }`}
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"
-              />
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z" />
             </svg>
-            <span className="text-xs font-medium">가계부</span>
+            <span className="text-xs font-medium tracking-wider">HOME</span>
           </button>
           <button
             onClick={() => setView("dashboard")}
-            className={`flex-1 py-3 flex flex-col items-center gap-1 cursor-pointer transition-colors ${
-              view === "dashboard" ? "text-blue-600" : "text-gray-400"
+            className={`flex-1 py-3 flex flex-col items-center gap-1 cursor-pointer transition-all ${
+              view === "dashboard"
+                ? "text-[#ff00aa] drop-shadow-[0_0_8px_rgba(255,0,170,0.5)]"
+                : "text-gray-600 hover:text-gray-400"
             }`}
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-              />
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
-            <span className="text-xs font-medium">대시보드</span>
+            <span className="text-xs font-medium tracking-wider">DASH</span>
           </button>
         </div>
       </nav>

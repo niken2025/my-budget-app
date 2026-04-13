@@ -8,16 +8,16 @@ interface CategoryChartProps {
 }
 
 const COLORS = [
-  "#ef4444",
-  "#f97316",
-  "#eab308",
-  "#22c55e",
-  "#06b6d4",
-  "#3b82f6",
-  "#8b5cf6",
-  "#ec4899",
-  "#6b7280",
-  "#14b8a6",
+  "#ff00aa",
+  "#00f0ff",
+  "#f0ff00",
+  "#b400ff",
+  "#ff4400",
+  "#00ff88",
+  "#ff6600",
+  "#0088ff",
+  "#ff0066",
+  "#00ffcc",
 ];
 
 export default function CategoryChart({
@@ -40,18 +40,20 @@ export default function CategoryChart({
   const format = (n: number) => n.toLocaleString("ko-KR");
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-5">
-      <h3 className="text-sm font-semibold text-gray-500 mb-4">
-        카테고리별 지출
+    <div className="cyber-card rounded-xl p-5 relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#ff00aa] to-transparent" />
+      <h3 className="text-xs font-semibold text-gray-500 mb-4 tracking-wider">
+        EXPENSE BY CATEGORY
       </h3>
 
-      <div className="h-4 rounded-full overflow-hidden flex mb-5">
+      <div className="h-3 rounded-full overflow-hidden flex mb-5 bg-[rgba(0,0,0,0.3)]">
         {sorted.map(([category, amount], i) => (
           <div
             key={category}
             style={{
               width: `${(amount / total) * 100}%`,
               backgroundColor: COLORS[i % COLORS.length],
+              boxShadow: `0 0 8px ${COLORS[i % COLORS.length]}66`,
             }}
             title={`${category}: ${format(amount)}원`}
           />
@@ -65,15 +67,18 @@ export default function CategoryChart({
             <div key={category} className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <span
-                  className="w-3 h-3 rounded-full shrink-0"
-                  style={{ backgroundColor: COLORS[i % COLORS.length] }}
+                  className="w-2.5 h-2.5 rounded-full shrink-0"
+                  style={{
+                    backgroundColor: COLORS[i % COLORS.length],
+                    boxShadow: `0 0 6px ${COLORS[i % COLORS.length]}88`,
+                  }}
                 />
-                <span className="text-sm text-gray-700">{category}</span>
+                <span className="text-sm text-[#c0c0e0]">{category}</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-400">{percent}%</span>
-                <span className="text-sm font-medium text-gray-700 w-24 text-right">
-                  {format(amount)}원
+                <span className="text-xs text-gray-500">{percent}%</span>
+                <span className="text-sm font-medium text-[#e0e0ff] w-24 text-right">
+                  {format(amount)}
                 </span>
               </div>
             </div>

@@ -31,15 +31,7 @@ export default function TransactionForm({ onAdd }: TransactionFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!amount || !category || !date) return;
-
-    onAdd({
-      type,
-      amount: Number(amount),
-      category,
-      description,
-      date,
-    });
-
+    onAdd({ type, amount: Number(amount), category, description, date });
     setAmount("");
     setCategory("");
     setDescription("");
@@ -51,9 +43,9 @@ export default function TransactionForm({ onAdd }: TransactionFormProps) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full py-4 rounded-2xl border-2 border-dashed border-gray-300 text-gray-500 hover:border-blue-400 hover:text-blue-500 transition-colors text-lg font-medium cursor-pointer"
+        className="w-full py-4 rounded-xl border border-dashed border-[rgba(0,240,255,0.3)] text-[#00f0ff] hover:border-[#00f0ff] hover:shadow-[0_0_20px_rgba(0,240,255,0.15)] transition-all text-lg font-medium cursor-pointer tracking-wider bg-transparent"
       >
-        + 새 내역 추가
+        + NEW RECORD
       </button>
     );
   }
@@ -61,43 +53,37 @@ export default function TransactionForm({ onAdd }: TransactionFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4"
+      className="cyber-card rounded-xl p-6 space-y-4 relative overflow-hidden"
     >
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-[#00f0ff] via-[#ff00aa] to-[#b400ff]" />
+
       <div className="flex gap-2">
         <button
           type="button"
-          onClick={() => {
-            setType("expense");
-            setCategory("");
-          }}
-          className={`flex-1 py-2.5 rounded-xl font-medium transition-colors cursor-pointer ${
+          onClick={() => { setType("expense"); setCategory(""); }}
+          className={`flex-1 py-2.5 rounded-lg font-medium transition-all cursor-pointer tracking-wider text-sm ${
             type === "expense"
-              ? "bg-red-500 text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              ? "bg-[#ff00aa] text-white shadow-[0_0_15px_rgba(255,0,170,0.3)]"
+              : "bg-[rgba(255,255,255,0.05)] text-gray-500 hover:text-gray-300 border border-[rgba(255,255,255,0.1)]"
           }`}
         >
-          지출
+          EXPENSE
         </button>
         <button
           type="button"
-          onClick={() => {
-            setType("income");
-            setCategory("");
-          }}
-          className={`flex-1 py-2.5 rounded-xl font-medium transition-colors cursor-pointer ${
+          onClick={() => { setType("income"); setCategory(""); }}
+          className={`flex-1 py-2.5 rounded-lg font-medium transition-all cursor-pointer tracking-wider text-sm ${
             type === "income"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              ? "bg-[#00f0ff] text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]"
+              : "bg-[rgba(255,255,255,0.05)] text-gray-500 hover:text-gray-300 border border-[rgba(255,255,255,0.1)]"
           }`}
         >
-          수입
+          INCOME
         </button>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          금액
-        </label>
+        <label className="block text-xs font-medium text-gray-500 mb-1 tracking-wider">AMOUNT</label>
         <input
           type="number"
           value={amount}
@@ -105,26 +91,24 @@ export default function TransactionForm({ onAdd }: TransactionFormProps) {
           placeholder="0"
           min="0"
           required
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-3 bg-[rgba(0,0,0,0.4)] border border-[rgba(0,240,255,0.2)] rounded-lg text-lg text-[#e0e0ff] focus:outline-none focus:border-[#00f0ff] focus:shadow-[0_0_10px_rgba(0,240,255,0.2)] transition-all"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          카테고리
-        </label>
+        <label className="block text-xs font-medium text-gray-500 mb-2 tracking-wider">CATEGORY</label>
         <div className="flex flex-wrap gap-2">
           {categories.map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => setCategory(cat)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
                 category === cat
                   ? type === "expense"
-                    ? "bg-red-500 text-white"
-                    : "bg-blue-500 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-[#ff00aa] text-white shadow-[0_0_10px_rgba(255,0,170,0.3)]"
+                    : "bg-[#00f0ff] text-black shadow-[0_0_10px_rgba(0,240,255,0.3)]"
+                  : "bg-[rgba(255,255,255,0.05)] text-gray-400 border border-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.3)]"
               }`}
             >
               {cat}
@@ -134,28 +118,24 @@ export default function TransactionForm({ onAdd }: TransactionFormProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          메모 (선택)
-        </label>
+        <label className="block text-xs font-medium text-gray-500 mb-1 tracking-wider">MEMO</label>
         <input
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="내용을 입력하세요"
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-3 bg-[rgba(0,0,0,0.4)] border border-[rgba(0,240,255,0.2)] rounded-lg text-[#e0e0ff] focus:outline-none focus:border-[#00f0ff] focus:shadow-[0_0_10px_rgba(0,240,255,0.2)] transition-all"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          날짜
-        </label>
+        <label className="block text-xs font-medium text-gray-500 mb-1 tracking-wider">DATE</label>
         <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
           required
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-3 bg-[rgba(0,0,0,0.4)] border border-[rgba(0,240,255,0.2)] rounded-lg text-[#e0e0ff] focus:outline-none focus:border-[#00f0ff] focus:shadow-[0_0_10px_rgba(0,240,255,0.2)] transition-all [color-scheme:dark]"
         />
       </div>
 
@@ -163,19 +143,19 @@ export default function TransactionForm({ onAdd }: TransactionFormProps) {
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 font-medium hover:bg-gray-200 transition-colors cursor-pointer"
+          className="flex-1 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] text-gray-400 font-medium hover:bg-[rgba(255,255,255,0.1)] transition-all cursor-pointer border border-[rgba(255,255,255,0.1)] tracking-wider text-sm"
         >
-          취소
+          CANCEL
         </button>
         <button
           type="submit"
-          className={`flex-1 py-3 rounded-xl text-white font-medium transition-colors cursor-pointer ${
+          className={`flex-1 py-3 rounded-lg text-sm font-medium transition-all cursor-pointer tracking-wider ${
             type === "expense"
-              ? "bg-red-500 hover:bg-red-600"
-              : "bg-blue-500 hover:bg-blue-600"
+              ? "bg-[#ff00aa] text-white hover:shadow-[0_0_20px_rgba(255,0,170,0.4)]"
+              : "bg-[#00f0ff] text-black hover:shadow-[0_0_20px_rgba(0,240,255,0.4)]"
           }`}
         >
-          추가하기
+          CONFIRM
         </button>
       </div>
     </form>

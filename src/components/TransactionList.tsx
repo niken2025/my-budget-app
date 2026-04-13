@@ -19,10 +19,10 @@ export default function TransactionList({
 
   if (monthlyTransactions.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-400">
-        <p className="text-4xl mb-3">📒</p>
-        <p className="text-lg">이번 달 내역이 없습니다</p>
-        <p className="text-sm mt-1">위의 버튼을 눌러 내역을 추가해보세요</p>
+      <div className="text-center py-12">
+        <p className="text-3xl mb-3 opacity-50">///</p>
+        <p className="text-lg text-gray-500 tracking-wider">NO DATA</p>
+        <p className="text-sm mt-1 text-gray-600">데이터가 없습니다</p>
       </div>
     );
   }
@@ -45,7 +45,7 @@ export default function TransactionList({
   const format = (n: number) => n.toLocaleString("ko-KR");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {Object.entries(grouped).map(([date, items]) => {
         const dayTotal = items.reduce(
           (sum, t) => sum + (t.type === "expense" ? -t.amount : t.amount),
@@ -54,36 +54,38 @@ export default function TransactionList({
         return (
           <div key={date}>
             <div className="flex justify-between items-center mb-2 px-1">
-              <h3 className="text-sm font-semibold text-gray-500">
+              <h3 className="text-xs font-semibold text-gray-500 tracking-wider">
                 {formatDate(date)}
               </h3>
               <span
-                className={`text-sm font-medium ${
-                  dayTotal >= 0 ? "text-blue-500" : "text-red-500"
+                className={`text-xs font-medium ${
+                  dayTotal >= 0 ? "text-[#00f0ff]" : "text-[#ff00aa]"
                 }`}
               >
                 {dayTotal >= 0 ? "+" : ""}
-                {format(dayTotal)}원
+                {format(dayTotal)}
               </span>
             </div>
-            <div className="bg-white border border-gray-200 rounded-2xl divide-y divide-gray-100 overflow-hidden">
+            <div className="cyber-card rounded-xl divide-y divide-[rgba(0,240,255,0.08)] overflow-hidden relative">
               {items.map((t) => (
                 <div
                   key={t.id}
-                  className="flex items-center justify-between px-4 py-3.5 group"
+                  className="flex items-center justify-between px-4 py-3.5 group hover:bg-[rgba(0,240,255,0.03)] transition-colors"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <span
-                      className={`shrink-0 w-2 h-2 rounded-full ${
-                        t.type === "income" ? "bg-blue-400" : "bg-red-400"
+                      className={`shrink-0 w-1.5 h-6 rounded-full ${
+                        t.type === "income"
+                          ? "bg-[#00f0ff] shadow-[0_0_6px_#00f0ff]"
+                          : "bg-[#ff00aa] shadow-[0_0_6px_#ff00aa]"
                       }`}
                     />
                     <div className="min-w-0">
-                      <p className="font-medium text-gray-800 truncate">
+                      <p className="font-medium text-[#e0e0ff] truncate text-sm">
                         {t.category}
                       </p>
                       {t.description && (
-                        <p className="text-sm text-gray-400 truncate">
+                        <p className="text-xs text-gray-500 truncate">
                           {t.description}
                         </p>
                       )}
@@ -91,16 +93,16 @@ export default function TransactionList({
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     <span
-                      className={`font-semibold ${
-                        t.type === "income" ? "text-blue-600" : "text-red-600"
+                      className={`font-semibold text-sm ${
+                        t.type === "income" ? "text-[#00f0ff]" : "text-[#ff00aa]"
                       }`}
                     >
                       {t.type === "income" ? "+" : "-"}
-                      {format(t.amount)}원
+                      {format(t.amount)}
                     </span>
                     <button
                       onClick={() => onDelete(t.id)}
-                      className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-400 transition-all text-lg cursor-pointer"
+                      className="opacity-0 group-hover:opacity-100 text-gray-600 hover:text-[#ff00aa] transition-all text-lg cursor-pointer"
                       title="삭제"
                     >
                       ×
